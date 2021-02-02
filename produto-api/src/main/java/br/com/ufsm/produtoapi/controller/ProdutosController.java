@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -36,7 +37,8 @@ public class ProdutosController {
 	
 	
 	@GetMapping
-	public List<ProdutoDto> getAll(String nome, Double precoMin, Double precoMax, TipoProduto tipo) {
+	public List<ProdutoDto> getAll(String nome, Double precoMin, 
+			Double precoMax, TipoProduto tipo) {
 		return ProdutoDto.converter(produtosService.findAll(nome, precoMin, precoMax, tipo));
 	}
 	
@@ -52,15 +54,16 @@ public class ProdutosController {
 		return produtosService.findById(id);
 	}
 	
-	@GetMapping
-	public List<ProdutoPrecoDispDto> getAll(@PathVariable List<Long> ids) {
+	@GetMapping("/precodisp")
+	public List<ProdutoPrecoDispDto> getPrecoDisp(@RequestParam List<Long> ids) {
 		return ProdutoPrecoDispDto.converter(produtosService.findPrecoDisp(ids));
 		//TODO null na lista - produtos not found ou indisponiveis
 	}
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<ProdutoDto> create(@RequestBody @Valid ProdutoForm form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<ProdutoDto> create(@RequestBody @Valid ProdutoForm form, 
+			UriComponentsBuilder uriBuilder) {
 		Produto produto = produtosService.create(form);
 		if (produto == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 		URI uri = uriBuilder.path("/produtos/{id}").buildAndExpand(produto.getIdProduto()).toUri();
@@ -69,7 +72,8 @@ public class ProdutosController {
 	
 	@PutMapping("/atualizarproduto/{id}")
 	@Transactional
-	public ResponseEntity<ProdutoDto> atualizarProduto(@PathVariable Long id, @RequestBody @Valid AtualizacaoProdutoForm form) {
+	public ResponseEntity<ProdutoDto> atualizarProduto(@PathVariable Long id, 
+			@RequestBody @Valid AtualizacaoProdutoForm form) {
 		ProdutoDto produtoDto = produtosService.atualizarProduto(id, form);
 		if (produtoDto == null) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok(produtoDto);
@@ -77,7 +81,8 @@ public class ProdutosController {
 	
 	@PutMapping("/atualizardisponibilidade/{id}")
 	@Transactional
-	public ResponseEntity<ProdutoDto> atualizarDisponibilidade(@PathVariable Long id, @RequestBody @Valid AtualizacaoDisponibilidadeForm form) {
+	public ResponseEntity<ProdutoDto> atualizarDisponibilidade(@PathVariable Long id, 
+			@RequestBody @Valid AtualizacaoDisponibilidadeForm form) {
 		ProdutoDto produtoDto = produtosService.atualizarDisp(id, form);
 		if (produtoDto == null) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok(produtoDto);
@@ -85,7 +90,7 @@ public class ProdutosController {
 	
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<?> remover(@PathVariable Long id) {
+	public ResponseEntity<?> remove(@PathVariable Long id) {
 		return produtosService.removerProduto(id);
 	}
 	
