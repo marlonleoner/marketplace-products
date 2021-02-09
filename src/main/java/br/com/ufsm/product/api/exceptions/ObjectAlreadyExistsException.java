@@ -1,4 +1,4 @@
-package br.com.ufsm.productapi.exceptions;
+package br.com.ufsm.product.api.exceptions;
 
 public class ObjectAlreadyExistsException extends RuntimeException {
 

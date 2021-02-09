@@ -1,4 +1,4 @@
-package br.com.ufsm.productapi.model;
+package br.com.ufsm.product.api.model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

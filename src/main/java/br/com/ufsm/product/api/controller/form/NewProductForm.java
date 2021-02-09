@@ -1,4 +1,4 @@
-package br.com.ufsm.productapi.controller.form;
+package br.com.ufsm.product.api.controller.form;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -6,8 +6,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import br.com.ufsm.productapi.model.Product;
-import br.com.ufsm.productapi.model.TypeEnum;
+import br.com.ufsm.product.api.model.Product;
+import br.com.ufsm.product.api.model.TypeEnum;
 import lombok.Getter;
 import lombok.Setter;
 

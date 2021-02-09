@@ -1,6 +1,6 @@
-package br.com.ufsm.productapi.controller.dto;
+package br.com.ufsm.product.api.controller.dto;
 
-import br.com.ufsm.productapi.model.Product;
+import br.com.ufsm.product.api.model.Product;
 import lombok.Data;
 
 @Data

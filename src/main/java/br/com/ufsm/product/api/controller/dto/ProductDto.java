@@ -1,10 +1,10 @@
-package br.com.ufsm.productapi.controller.dto;
+package br.com.ufsm.product.api.controller.dto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import br.com.ufsm.productapi.model.Product;
-import br.com.ufsm.productapi.model.TypeEnum;
+import br.com.ufsm.product.api.model.Product;
+import br.com.ufsm.product.api.model.TypeEnum;
 import lombok.Data;
 
 @Data

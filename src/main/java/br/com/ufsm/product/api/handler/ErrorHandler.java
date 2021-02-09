@@ -1,4 +1,4 @@
-package br.com.ufsm.productapi.handler;
+package br.com.ufsm.product.api.handler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import br.com.ufsm.productapi.exceptions.ObjectAlreadyExistsException;
-import br.com.ufsm.productapi.exceptions.ObjectNotFoundException;
-import br.com.ufsm.productapi.exceptions.UnavailableProductException;
-import br.com.ufsm.productapi.model.Error;
-import br.com.ufsm.productapi.model.UnavailableProductError;
+import br.com.ufsm.product.api.exceptions.ObjectAlreadyExistsException;
+import br.com.ufsm.product.api.exceptions.ObjectNotFoundException;
+import br.com.ufsm.product.api.exceptions.UnavailableProductException;
+import br.com.ufsm.product.api.model.Error;
+import br.com.ufsm.product.api.model.UnavailableProductError;
 
 @RestControllerAdvice
 public class ErrorHandler {

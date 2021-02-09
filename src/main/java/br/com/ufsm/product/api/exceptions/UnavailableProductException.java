@@ -1,8 +1,8 @@
-package br.com.ufsm.productapi.exceptions;
+package br.com.ufsm.product.api.exceptions;
 
 import java.util.List;
 
-import br.com.ufsm.productapi.model.UnavailableProductError;
+import br.com.ufsm.product.api.model.UnavailableProductError;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,4 +1,4 @@
-package br.com.ufsm.productapi.controller;
+package br.com.ufsm.product.api.controller;
 
 import java.net.URI;
 import java.util.List;
@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.ufsm.productapi.controller.dto.DisponibiltyDto;
-import br.com.ufsm.productapi.controller.dto.ProductDto;
-import br.com.ufsm.productapi.controller.form.NewProductForm;
-import br.com.ufsm.productapi.controller.form.UpdateProductForm;
-import br.com.ufsm.productapi.controller.form.VerifyDisponibilityForm;
-import br.com.ufsm.productapi.model.TypeEnum;
-import br.com.ufsm.productapi.services.ProductsService;
+import br.com.ufsm.product.api.controller.dto.DisponibiltyDto;
+import br.com.ufsm.product.api.controller.dto.ProductDto;
+import br.com.ufsm.product.api.controller.form.NewProductForm;
+import br.com.ufsm.product.api.controller.form.UpdateProductForm;
+import br.com.ufsm.product.api.controller.form.VerifyDisponibilityForm;
+import br.com.ufsm.product.api.model.TypeEnum;
+import br.com.ufsm.product.api.services.ProductsService;
 
 @RestController
 @RequestMapping("/products")
