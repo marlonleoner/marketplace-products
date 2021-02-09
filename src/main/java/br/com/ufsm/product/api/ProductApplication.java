@@ -1,4 +1,4 @@
-package br.com.ufsm.productapi;
+package br.com.ufsm.product.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,11 +1,11 @@
-package br.com.ufsm.productapi.repository;
+package br.com.ufsm.product.api.repository;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.com.ufsm.productapi.model.Product;
+import br.com.ufsm.product.api.model.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 

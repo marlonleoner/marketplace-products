@@ -1,4 +1,4 @@
-package br.com.ufsm.productapi.services;
+package br.com.ufsm.product.api.services;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,18 +12,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import br.com.ufsm.productapi.controller.dto.DisponibiltyDto;
-import br.com.ufsm.productapi.controller.form.NewProductForm;
-import br.com.ufsm.productapi.controller.form.ProductDisponibilityForm;
-import br.com.ufsm.productapi.controller.form.UpdateProductForm;
-import br.com.ufsm.productapi.controller.form.VerifyDisponibilityForm;
-import br.com.ufsm.productapi.exceptions.ObjectAlreadyExistsException;
-import br.com.ufsm.productapi.exceptions.ObjectNotFoundException;
-import br.com.ufsm.productapi.exceptions.UnavailableProductException;
-import br.com.ufsm.productapi.model.Product;
-import br.com.ufsm.productapi.model.TypeEnum;
-import br.com.ufsm.productapi.model.UnavailableProductError;
-import br.com.ufsm.productapi.repository.ProductRepository;
+import br.com.ufsm.product.api.controller.dto.DisponibiltyDto;
+import br.com.ufsm.product.api.controller.form.NewProductForm;
+import br.com.ufsm.product.api.controller.form.ProductDisponibilityForm;
+import br.com.ufsm.product.api.controller.form.UpdateProductForm;
+import br.com.ufsm.product.api.controller.form.VerifyDisponibilityForm;
+import br.com.ufsm.product.api.exceptions.ObjectAlreadyExistsException;
+import br.com.ufsm.product.api.exceptions.ObjectNotFoundException;
+import br.com.ufsm.product.api.exceptions.UnavailableProductException;
+import br.com.ufsm.product.api.model.Product;
+import br.com.ufsm.product.api.model.TypeEnum;
+import br.com.ufsm.product.api.model.UnavailableProductError;
+import br.com.ufsm.product.api.repository.ProductRepository;
 
 @Service
 public class ProductsService {
