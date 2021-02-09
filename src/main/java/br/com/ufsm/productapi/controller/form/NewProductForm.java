@@ -11,24 +11,32 @@ import br.com.ufsm.productapi.model.TypeEnum;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
-public class ProductForm {
+@Getter
+@Setter
+public class NewProductForm {
 
-	@NotNull @NotEmpty
-	private String nome;
-	
-	@NotNull @Positive
-	private Double preco;
-	
+	@NotNull
+	@NotEmpty
+	private String name;
+
+	@NotNull
+	@NotEmpty
+	private String description;
+
+	@NotNull
+	@Positive
+	private Double price;
+
+	@NotNull
+	@Positive
+	private Integer amount;
+
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	private TypeEnum tipo;
-	
-	@NotNull @Positive
-	private Integer disponibilidade;
+	private TypeEnum type;
 
 	public Product converter() {
-		return new Product(nome, preco, tipo, disponibilidade);
+		return new Product(this.name, this.description, this.price, this.type, this.amount);
 	}
-	
+
 }

@@ -7,16 +7,24 @@ import javax.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 public class UpdateProductForm {
 
-	@NotNull @NotEmpty
-	private String nome;
-	
-	@NotNull @Positive
-	private Double preco;
-	
-	@NotNull @Positive
-	private Integer disponibilidade;
-	
+	@NotNull
+	@NotEmpty
+	private String name;
+
+	@NotNull
+	@NotEmpty
+	private String description;
+
+	@NotNull
+	@Positive
+	private Double price;
+
+	@NotNull
+	@Positive
+	private Integer amount;
+
 }

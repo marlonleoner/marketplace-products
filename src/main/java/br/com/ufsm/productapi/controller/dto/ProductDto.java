@@ -11,17 +11,24 @@ import lombok.Data;
 public class ProductDto {
 
 	private Long id;
+
 	private String name;
+
+	private String description;
+
 	private Double price;
+
 	private TypeEnum type;
-	private Integer dispoinibility;
-	
+
+	private Integer amount;
+
 	public ProductDto(Product produto) {
-		this.id = produto.getIdProduct();
-		this.price = produto.getPrice();
-		this.type = produto.getTypeEnum();
+		this.id = produto.getId();
 		this.name = produto.getName();
-		this.dispoinibility = produto.getDisponibility();
+		this.description = produto.getDescription();
+		this.price = produto.getPrice();
+		this.type = produto.getType();
+		this.amount = produto.getAmount();
 	}
 
 	public static List<ProductDto> converter(List<Product> produtos) {
