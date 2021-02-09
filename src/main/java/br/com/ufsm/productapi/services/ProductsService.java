@@ -1,5 +1,6 @@
 package br.com.ufsm.productapi.services;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,12 +12,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import br.com.ufsm.productapi.controller.dto.ProductDto;
-import br.com.ufsm.productapi.controller.form.ProductForm;
-import br.com.ufsm.productapi.controller.form.UpdateDispForm;
+import br.com.ufsm.productapi.controller.dto.DisponibiltyDto;
+import br.com.ufsm.productapi.controller.form.NewProductForm;
+import br.com.ufsm.productapi.controller.form.ProductDisponibilityForm;
 import br.com.ufsm.productapi.controller.form.UpdateProductForm;
+import br.com.ufsm.productapi.controller.form.VerifyDisponibilityForm;
+import br.com.ufsm.productapi.exceptions.ObjectAlreadyExistsException;
+import br.com.ufsm.productapi.exceptions.ObjectNotFoundException;
+import br.com.ufsm.productapi.exceptions.UnavailableProductException;
 import br.com.ufsm.productapi.model.Product;
 import br.com.ufsm.productapi.model.TypeEnum;
+import br.com.ufsm.productapi.model.UnavailableProductError;
 import br.com.ufsm.productapi.repository.ProductRepository;
 
 @Service
@@ -24,109 +30,96 @@ public class ProductsService {
 
 	@Autowired
 	private ProductRepository productRepository;
-	
-	
-	public List<Product> findAll(String name, Double minPrice, Double maxPrice, TypeEnum type){
-		List<Product> products = productRepository.findAll();
-		if(name != null) {
-			for (Product p : products) {
-				if(p.getName() != name) products.remove(p);
-				//TODO muito ineficiente ???
-			}
-		}
-		if(minPrice != null) {
-			for (Product p : products) {
-				if(p.getPrice() < minPrice) products.remove(p);
-			}
-		}
-		if(maxPrice != null) {
-			for (Product p : products) {
-				if(p.getPrice() > maxPrice) products.remove(p);
-			}
-		}
-		if(type != null) {
-			for (Product p : products) {
-				if(p.getTypeEnum() != type) products.remove(p);
-			}
-		}
+
+	public List<Product> find(String name, Double minPrice, Double maxPrice, TypeEnum type) {
+		List<Product> products = productRepository.findByNameContainsAndPriceGreaterThanAndPriceLessThan(name, minPrice,
+				maxPrice);
+
+//		if (type != null) {
+//			for (Product p : products) {
+//				if (p.getType() != type)
+//					products.remove(p);
+//			}
+//		}
+
 		return products;
 	}
-	
-	/*
-	public ResponseEntity<ProdutoDto> findByNome(String nome) {
-		Optional<Produto> produto = produtoRepository.findByNome(nome);
-		if (produto.isPresent()) {
-			return ResponseEntity.ok(new ProdutoDto(produto.get()));
-		}
-		return ResponseEntity.notFound().build();
-	}
-	*/
-	
-	public List<Product> findPrceDisp(List<Long> ids) {
-		List<Product> list = new ArrayList<>();
-		for (Long id : ids) {
-			Optional<Product> product = productRepository.findById(id);
-			if (product.isPresent() && product.get().getDisponibility()>0) {
-				list.add(product.get());
-			}
-			else{
-				list.add(null);
+
+	public List<DisponibiltyDto> verify(VerifyDisponibilityForm form) {
+		List<DisponibiltyDto> products = new ArrayList<>();
+
+		List<UnavailableProductError> errors = new ArrayList<>();
+
+		List<ProductDisponibilityForm> formProducts = form.getProducts();
+		for (ProductDisponibilityForm p : formProducts) {
+			Optional<Product> productExists = productRepository.findById(p.getId());
+			if (productExists.isPresent()) {
+				Product product = productExists.get();
+				if (product.isAvailable(p.getAmount())) {
+					products.add(new DisponibiltyDto(product, p.getAmount()));
+				} else {
+					errors.add(new UnavailableProductError("InvalidAmount", "Quantidade indisponivel.", p.getId()));
+				}
+			} else {
+				errors.add(new UnavailableProductError("ObjectNotFound", "Produto não encontrado.", p.getId()));
 			}
 		}
-		return list;
+
+		if (!errors.isEmpty()) {
+			UnavailableProductException ex = new UnavailableProductException("");
+			ex.setErrors(errors);
+			throw ex;
+		}
+
+		return products;
 	}
-	
-	public ResponseEntity<ProductDto> findById(Long id) {
+
+	public Product findById(Long id) {
 		Optional<Product> product = productRepository.findById(id);
-		if (product.isPresent()) {
-			return ResponseEntity.ok(new ProductDto(product.get()));
+		if (!product.isPresent()) {
+			throw new ObjectNotFoundException("Produto não encontrado.");
 		}
-		return ResponseEntity.notFound().build();
+
+		return product.get();
 	}
-	
-	public Product create(ProductForm form) {
-		Product product = form.converter();
-		List<Product> products = productRepository.findAll();
-		for (Product p : products) {
-			if (p.equals(product)) return null;
+
+	public Product create(NewProductForm form) {
+		Optional<Product> productExists = productRepository.findByName(form.getName());
+		if (productExists.isPresent()) {
+			throw new ObjectAlreadyExistsException("Produto já cadastrado.");
 		}
+
+		Product product = form.converter();
 		productRepository.save(product);
+
 		return product;
 	}
-	
-	public ProductDto atualizarProduto(Long id, @Valid UpdateProductForm form) {
-		Optional<Product> optional = productRepository.findById(id);
-		if (optional.isPresent()) {
-			Product p = optional.get();
-			p.setDisponibility(form.getDisponibilidade());
-			p.setName(form.getNome());
-			p.setPrice(form.getPreco());
-			productRepository.save(p);
-			return new ProductDto(p);
+
+	public Product update(Long id, @Valid UpdateProductForm form) {
+		Optional<Product> productExists = productRepository.findById(id);
+		if (!productExists.isPresent()) {
+			throw new ObjectNotFoundException("Produto não encontrado.");
 		}
-		return null;
+
+		Product product = productExists.get();
+		product.setName(form.getName());
+		product.setDescription(form.getDescription());
+		product.setPrice(form.getPrice());
+		product.setAmount(form.getAmount());
+		product.setUpdatedAt(LocalDateTime.now());
+
+		return product;
 	}
 
-	public ProductDto atualizarDisp(Long id, @Valid UpdateDispForm form) {
-		Optional<Product> optional = productRepository.findById(id);
-		if (optional.isPresent()) {
-			Product p = optional.get();
-			p.setDisponibility(form.getDisponibilidade());
-			productRepository.save(p);
-			return new ProductDto(p);
+	public ResponseEntity<?> delete(@PathVariable Long id) {
+		Optional<Product> productExists = productRepository.findById(id);
+		if (!productExists.isPresent()) {
+			throw new ObjectNotFoundException("Produto não encontrado.");
 		}
-		return null;
-	}
-	
-	public ResponseEntity<?> removerProduto(@PathVariable Long id) {
-		Optional<Product> optional = productRepository.findById(id);
-		if (optional.isPresent()) {
-			productRepository.deleteById(id);
-			return ResponseEntity.ok().build();
-		}
-		return ResponseEntity.notFound().build();
+
+		productRepository.deleteById(id);
+
+		return ResponseEntity.ok().build();
 	}
 
-	
-	
 }
