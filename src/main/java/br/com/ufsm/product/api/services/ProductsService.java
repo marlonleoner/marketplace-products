@@ -58,7 +58,7 @@ public class ProductsService {
 				if (product.isAvailable(p.getAmount())) {
 					products.add(new DisponibiltyDto(product, p.getAmount()));
 				} else {
-					errors.add(new UnavailableProductError("InvalidAmount", "Quantidade indisponivel.", p.getId()));
+					errors.add(new UnavailableProductError("InvalidAmount", "Quantidade solicitada indisponivel.", p.getId()));
 				}
 			} else {
 				errors.add(new UnavailableProductError("ObjectNotFound", "Produto não encontrado.", p.getId()));
