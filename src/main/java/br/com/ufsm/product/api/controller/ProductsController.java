@@ -41,14 +41,14 @@ public class ProductsController {
 		return ProductDto.converter(productsService.find(name, minPrice, maxPrice, type));
 	}
 
-	@GetMapping("/available")
-	public List<DisponibiltyDto> getPrecoDisp(@RequestBody VerifyDisponibilityForm form) {
-		return productsService.verify(form);
-	}
-
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductDto> get(@PathVariable Long id) {
 		return ResponseEntity.ok(new ProductDto(productsService.findById(id)));
+	}
+
+	@PostMapping("/available")
+	public List<DisponibiltyDto> getPrecoDisp(@RequestBody VerifyDisponibilityForm form) {
+		return productsService.verify(form);
 	}
 
 	@PostMapping
