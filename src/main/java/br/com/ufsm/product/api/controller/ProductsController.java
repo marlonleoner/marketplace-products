@@ -22,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.ufsm.product.api.controller.dto.DisponibiltyDto;
 import br.com.ufsm.product.api.controller.dto.ProductDto;
 import br.com.ufsm.product.api.controller.form.NewProductForm;
+import br.com.ufsm.product.api.controller.form.UpdateAmountForm;
 import br.com.ufsm.product.api.controller.form.UpdateProductForm;
 import br.com.ufsm.product.api.controller.form.VerifyDisponibilityForm;
 import br.com.ufsm.product.api.model.TypeEnum;
@@ -62,6 +63,12 @@ public class ProductsController {
 	@Transactional
 	public ResponseEntity<ProductDto> update(@PathVariable Long id, @RequestBody @Valid UpdateProductForm form) {
 		return ResponseEntity.ok(new ProductDto(productsService.update(id, form)));
+	}
+
+	@PutMapping("/{id}/amount")
+	@Transactional
+	public ResponseEntity<ProductDto> updateAmount(@PathVariable Long id, @RequestBody @Valid UpdateAmountForm form) {
+		return ResponseEntity.ok(new ProductDto(productsService.updateAmount(id, form)));
 	}
 
 	@DeleteMapping("/{id}")

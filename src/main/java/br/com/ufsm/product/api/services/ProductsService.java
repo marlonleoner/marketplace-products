@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import br.com.ufsm.product.api.controller.dto.DisponibiltyDto;
 import br.com.ufsm.product.api.controller.form.NewProductForm;
 import br.com.ufsm.product.api.controller.form.ProductDisponibilityForm;
+import br.com.ufsm.product.api.controller.form.UpdateAmountForm;
 import br.com.ufsm.product.api.controller.form.UpdateProductForm;
 import br.com.ufsm.product.api.controller.form.VerifyDisponibilityForm;
 import br.com.ufsm.product.api.exceptions.ObjectAlreadyExistsException;
@@ -35,12 +36,12 @@ public class ProductsService {
 		List<Product> products = productRepository.findByNameContainsAndPriceGreaterThanAndPriceLessThan(name, minPrice,
 				maxPrice);
 
-//		if (type != null) {
-//			for (Product p : products) {
-//				if (p.getType() != type)
-//					products.remove(p);
-//			}
-//		}
+		// if (type != null) {
+		// for (Product p : products) {
+		// if (p.getType() != type)
+		// products.remove(p);
+		// }
+		// }
 
 		return products;
 	}
@@ -58,7 +59,8 @@ public class ProductsService {
 				if (product.isAvailable(p.getAmount())) {
 					products.add(new DisponibiltyDto(product, p.getAmount()));
 				} else {
-					errors.add(new UnavailableProductError("InvalidAmount", "Quantidade solicitada indisponivel.", p.getId()));
+					errors.add(new UnavailableProductError("InvalidAmount", "Quantidade solicitada indisponivel.",
+							p.getId()));
 				}
 			} else {
 				errors.add(new UnavailableProductError("ObjectNotFound", "Produto não encontrado.", p.getId()));
@@ -106,6 +108,25 @@ public class ProductsService {
 		product.setDescription(form.getDescription());
 		product.setPrice(form.getPrice());
 		product.setAmount(form.getAmount());
+		product.setUpdatedAt(LocalDateTime.now());
+
+		return product;
+	}
+
+	public Product updateAmount(Long id, @Valid UpdateAmountForm form) {
+		System.out.println(" > updateAmount(): [" + id + "] " + form.getAmount());
+
+		Optional<Product> productExists = productRepository.findById(id);
+		if (!productExists.isPresent()) {
+			throw new ObjectNotFoundException("Produto não encontrado.");
+		}
+
+		Product product = productExists.get();
+		if (product.getAmount() - form.getAmount() < 0) {
+			throw new ObjectNotFoundException("Quantidade solicitada indisponivel.");
+		}
+
+		product.setAmount(product.getAmount() - form.getAmount());
 		product.setUpdatedAt(LocalDateTime.now());
 
 		return product;

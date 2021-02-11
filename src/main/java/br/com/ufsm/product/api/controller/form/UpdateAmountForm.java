@@ -6,10 +6,12 @@ import javax.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
-public class UpdateDispForm {
+@Getter
+@Setter
+public class UpdateAmountForm {
 
-	@NotNull @Positive
-	private Integer disponibilidade;
-	
+	@NotNull
+	@Positive
+	private Integer amount;
+
 }
